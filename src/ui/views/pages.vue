@@ -7,6 +7,7 @@
   import { usePayment } from "../../lib/payment.ts";
   import { useToggleCheckAll } from "../../lib/toggleCheckAll.ts";
   import { useExportTable } from "../../lib/exportTable.ts";
+  import { useSearch } from "../../lib/searchData.ts";
   import { dataTable as initialDataTable } from "../../data/views/tableData.js";
 
   const dataTable = ref(initialDataTable);
@@ -18,6 +19,7 @@
   const { paymentStatus } = usePayment(dataTable);
   const { toggleCheckAll } = useToggleCheckAll(dataTable, checkAll);
   const { exportTable } = useExportTable(dataTable);
+  const { searchQuery, filteredDataTable } = useSearch(dataTable.value);
 </script>
 
 <template>
@@ -47,7 +49,7 @@
             <label>Check All</label>
           </form>
           <form>
-            <input autocomplete="off" type="search" name="search" placeholder="Search" />
+            <input autocomplete="off" type="search" name="search" placeholder="Search" v-model="searchQuery" />
           </form>
         </div>
 
@@ -77,7 +79,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(item, index) in dataTable" :key="index">
+              <tr v-for="(item, index) in filteredDataTable" :key="index">
                 <td><input type="checkbox" v-model="item.checkBox" /></td>
                 <td>{{ item.noKewajiban }}</td>
                 <td>{{ item.noPolisi }}</td>
